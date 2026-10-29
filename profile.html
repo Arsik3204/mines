@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="css/profile.css">
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+
+<header>
+    <div class="container">
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer">✦<span>Vinted</span></div>
+        <div class="auth">
+            <a href="/logout" class="btn btn-primary">Logout</a>
+        </div>
+    </div>
+</header>
+
+<div class="container-body">
+    <div class="profile-wrapper">
+
+        <div class="profile-card">
+            <div class="avatar" id="avatar">?</div>
+            <div class="profile-info">
+                <h1 id="username">Profile</h1>
+                <p class="profile-email" id="userEmail">Загрузка...</p>
+                <div class="profile-meta">
+                    <div class="meta-item">
+                        <span class="meta-label">Tracks</span>
+                        <span class="meta-value" id="trackCount">0</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Followers</span>
+                        <span class="meta-value">0</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Following</span>
+                        <span class="meta-value">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-section">
+            <h2 class="section-title">My Tracks</h2>
+            <div id="tracksContainer">
+                <p class="empty-state">You haven't uploaded any tracks yet.</p>
+            </div>
+            <button class="body-action-btn" style="margin-top: 20px;">Upload a track</button>
+        </div>
+
+        <div class="profile-section">
+            <h2 class="section-title">Playlists</h2>
+            <p class="empty-state">No playlists yet. Create your first one!</p>
+        </div>
+
+    </div>
+</div>
+
+
+    <script src="js/profile.js"></script>
+</body>
+</html>

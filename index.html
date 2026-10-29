@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[111]</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header>
+    <div class="container">
+        <canvas id="starfield"></canvas>
+
+        <div class="container">
+            <div class="logo">✦<span>Vinted</span></div>
+            <div class="auth">
+                <button class="btn" onclick="window.location.href='sign_in.html'">Sign In</button>
+                <button class="btn btn-primary" onclick="window.location.href='create_account.html'">Create Account</button>
+            </div>
+        </div>
+</header>
+
+<div class="container-body">
+    <div class="content-wrapper">
+        <h1>LISTEN.</h1>
+        <h1>UPLOAD.</h1>
+        <h1>DISCOVER.</h1>
+
+        <p class="subtitle">Join the platform and discover new artists.</p>
+        <button class="body-action-btn" onclick="window.location.href='sign_in.html'">Start listening.</button>
+    </div>
+</div>
+
+<div class="track-of-the-day">
+    <audio id="music" src="music/XVII%20-%20de%20jure%20.mp3" loop></audio>
+    <div class="track-cover"></div>
+    <div class="track-info">
+        <span class="track-title">De jure</span>
+        <span class="track-artist">Королевский XVII</span>
+    </div>
+    <div class="play-icon" id="playBtn">▶</div>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>

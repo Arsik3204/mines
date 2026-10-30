@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
+    <title>Profile — Vinted</title>
     <link rel="stylesheet" href="css/profile.css">
 </head>
 <body>
@@ -12,7 +12,7 @@
 
 <header>
     <div class="container">
-        <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer">✦<span>Vinted</span></div>
+        <div class="logo" onclick="window.location.href='index.html'">✦<span>Vinted</span></div>
         <div class="auth">
             <a href="/logout" class="btn btn-primary">Logout</a>
         </div>
@@ -21,46 +21,84 @@
 
 <div class="container-body">
     <div class="profile-wrapper">
+        <div class="tabs">
+            <div class="tab active" data-target="tab-profile">Profile</div>
+            <div class="tab" data-target="tab-snippets">Snippets</div>
+        </div>
 
-        <div class="profile-card">
-            <div class="avatar" id="avatar">?</div>
-            <div class="profile-info">
-                <h1 id="username">Profile</h1>
-                <p class="profile-email" id="userEmail">Загрузка...</p>
-                <div class="profile-meta">
-                    <div class="meta-item">
-                        <span class="meta-label">Tracks</span>
-                        <span class="meta-value" id="trackCount">0</span>
+        <div id="tab-profile" class="tab-content active">
+            <div class="card profile-card">
+                <button class="edit-btn" id="openEditModalBtn">✎ Edit Profile</button>
+                <div class="avatar" id="avatar">?</div>
+                <div class="profile-info">
+                    <h1 id="username">Profile</h1>
+                    <p class="profile-email" id="userEmail">Загрузка...</p>
+                    <div class="profile-meta">
+                        <div class="meta-item"><span class="meta-label">Tracks</span><span class="meta-value" id="trackCount">0</span></div>
+                        <div class="meta-item"><span class="meta-label">Playlists</span><span class="meta-value" id="playlistCount">0</span></div>
+                        <div class="meta-item"><span class="meta-label">Snippets</span><span class="meta-value" id="snippetCount">0</span></div>
                     </div>
-                    <div class="meta-item">
-                        <span class="meta-label">Followers</span>
-                        <span class="meta-value">0</span>
-                    </div>
-                    <div class="meta-item">
-                        <span class="meta-label">Following</span>
-                        <span class="meta-value">0</span>
-                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="section-title">My Tracks</h2>
+                <div id="tracksContainer" class="list-container"></div>
+                <div class="form-row">
+                    <input type="text" id="newTrackTitle" class="form-input" placeholder="Track Title">
+                    <input type="text" id="newTrackArtist" class="form-input" placeholder="Artist">
+                    <button class="action-btn" id="addTrackBtn">Add Track</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="section-title">Playlists</h2>
+                <div id="playlistsContainer" class="list-container"></div>
+                <div class="form-row">
+                    <input type="text" id="newPlaylistName" class="form-input" placeholder="Playlist Name">
+                    <button class="action-btn" id="addPlaylistBtn">Create Playlist</button>
                 </div>
             </div>
         </div>
 
-        <div class="profile-section">
-            <h2 class="section-title">My Tracks</h2>
-            <div id="tracksContainer">
-                <p class="empty-state">You haven't uploaded any tracks yet.</p>
+        <div id="tab-snippets" class="tab-content">
+            <div class="card">
+                <h2 class="section-title">Post a Snippet</h2>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <textarea id="newSnippetText" class="form-input" rows="3" placeholder="What's on your mind?"></textarea>
+                    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                        <input type="file" id="newSnippetAudio" accept="audio/*" class="file-input">
+                        <button class="action-btn" id="addSnippetBtn">Publish Snippet</button>
+                    </div>
+                </div>
             </div>
-            <button class="body-action-btn" style="margin-top: 20px;">Upload a track</button>
-        </div>
 
-        <div class="profile-section">
-            <h2 class="section-title">Playlists</h2>
-            <p class="empty-state">No playlists yet. Create your first one!</p>
+            <div class="card">
+                <h2 class="section-title">My Snippets</h2>
+                <div id="snippetsContainer"></div>
+            </div>
         </div>
-
     </div>
 </div>
 
+<div class="modal-overlay" id="editModal">
+    <div class="modal">
+        <button class="close-btn" id="closeEditModalBtn">&times;</button>
+        <h2>Edit Profile</h2>
+        <form id="editProfileForm">
+            <div class="input-group">
+                <label>Display Name</label>
+                <input type="text" name="displayName" id="editName" placeholder="Your name">
+            </div>
+            <div class="input-group">
+                <label>Avatar Image</label>
+                <input type="file" name="avatar" accept="image/*" class="file-input">
+            </div>
+            <button type="submit" class="action-btn" style="width: 100%;">Save Changes</button>
+        </form>
+    </div>
+</div>
 
-    <script src="js/profile.js"></script>
+<script src="js/profile.js"></script>
 </body>
 </html>

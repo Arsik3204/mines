@@ -44,10 +44,18 @@
             <div class="card">
                 <h2 class="section-title">My Tracks</h2>
                 <div id="tracksContainer" class="list-container"></div>
-                <div class="form-row">
-                    <input type="text" id="newTrackTitle" class="form-input" placeholder="Track Title">
-                    <input type="text" id="newTrackArtist" class="form-input" placeholder="Artist">
-                    <button class="action-btn" id="addTrackBtn">Add Track</button>
+                <div class="form-row" style="flex-direction: column; align-items: stretch; gap: 10px;">
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="newTrackTitle" class="form-input" placeholder="Track Title" required>
+                        <input type="text" id="newTrackArtist" class="form-input" placeholder="Artist" required>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+                        <div style="display: flex; gap: 15px;">
+                            <label style="color: #888; font-size: 14px; cursor: pointer;">Audio: <input type="file" id="newTrackAudio" accept="audio/*" class="file-input" required></label>
+                            <label style="color: #888; font-size: 14px; cursor: pointer;">Cover: <input type="file" id="newTrackCover" accept="image/*" class="file-input"></label>
+                        </div>
+                        <button class="action-btn" id="addTrackBtn">Upload Track</button>
+                    </div>
                 </div>
             </div>
 
@@ -72,13 +80,32 @@
                     </div>
                 </div>
             </div>
-
             <div class="card">
                 <h2 class="section-title">My Snippets</h2>
                 <div id="snippetsContainer"></div>
             </div>
         </div>
     </div>
+</div>
+
+<div class="player" id="musicPlayer">
+    <div class="player-cover" id="playerCover"></div>
+    <div class="player-info">
+        <div class="player-title" id="playerTitle">Track Title</div>
+        <div class="player-artist" id="playerArtist">Artist</div>
+    </div>
+    <div class="player-controls">
+        <button id="prevBtn">⏮</button>
+        <button id="playPauseBtn">▶</button>
+        <button id="nextBtn">⏭</button>
+    </div>
+    <div class="player-progress-container">
+        <span id="currentTime">0:00</span>
+        <input type="range" id="progressBar" value="0" min="0" max="100">
+        <span id="duration">0:00</span>
+    </div>
+    <button id="closePlayerBtn" class="close-player">&times;</button>
+    <audio id="mainAudio"></audio>
 </div>
 
 <div class="modal-overlay" id="editModal">

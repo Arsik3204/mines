@@ -12,9 +12,7 @@ const db = new Database('database.db');
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         const dir = path.join(__dirname, 'uploads');
-        if (!fs.existsSync(dir)){
-            fs.mkdirSync(dir);
-        }
+        if (!fs.existsSync(dir)) fs.mkdirSync(dir);
         cb(null, dir);
     },
     filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
@@ -22,11 +20,11 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 db.exec(`
-  CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT UNIQUE, password TEXT, display_name TEXT, avatar TEXT DEFAULT '');
-  CREATE TABLE IF NOT EXISTS tracks (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, title TEXT, artist TEXT);
-  CREATE TABLE IF NOT EXISTS playlists (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, name TEXT);
-  CREATE TABLE IF NOT EXISTS playlist_tracks (playlist_id INTEGER, track_id INTEGER, PRIMARY KEY(playlist_id, track_id));
-  CREATE TABLE IF NOT EXISTS snippets (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, text TEXT, audio_url TEXT, created_at DATETIME DEFAULT CURRENT_TIMESTAMP);
+    CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT UNIQUE, password TEXT, display_name TEXT, avatar TEXT DEFAULT '');
+    CREATE TABLE IF NOT EXISTS tracks (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, title TEXT, artist TEXT, audio_url TEXT, cover_url TEXT);
+    CREATE TABLE IF NOT EXISTS playlists (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, name TEXT);
+    CREATE TABLE IF NOT EXISTS playlist_tracks (playlist_id INTEGER, track_id INTEGER, PRIMARY KEY(playlist_id, track_id));
+    CREATE TABLE IF NOT EXISTS snippets (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, text TEXT, audio_url TEXT, created_at DATETIME DEFAULT CURRENT_TIMESTAMP);
 `);
 
 app.use(express.urlencoded({ extended: true }));
@@ -78,8 +76,21 @@ app.post('/api/profile', upload.single('avatar'), (req, res) => {
     res.json({ success: true });
 });
 
-app.post('/api/tracks', (req, res) => {
-    db.prepare('INSERT INTO tracks (user_id, title, artist) VALUES (?, ?, ?)').run(req.session.userId, req.body.title, req.body.artist || 'Unknown');
+app.post('/api/tracks', upload.fields([{ name: 'audio', maxCount: 1 }, { name: 'cover', maxCount: 1 }]), (req, res) => {
+    const { title, artist } = req.body;
+    const audioUrl = req.files['audio'] ? '/uploads/' + req.files['audio'][0].filename : null;
+    const coverUrl = req.files['cover'] ? '/uploads/' + req.files['cover'][0].filename : null;
+
+    if (!audioUrl) return res.status(400).json({ error: 'Аудиофайл обязателен' });
+
+    db.prepare('INSERT INTO tracks (user_id, title, artist, audio_url, cover_url) VALUES (?, ?, ?, ?, ?)').run(req.session.userId, title, artist || 'Unknown', audioUrl, coverUrl);
+    res.json({ success: true });
+});
+
+app.delete('/api/tracks/:id', (req, res) => {
+    const trackId = req.params.id;
+    db.prepare('DELETE FROM playlist_tracks WHERE track_id = ?').run(trackId);
+    db.prepare('DELETE FROM tracks WHERE id = ? AND user_id = ?').run(trackId, req.session.userId);
     res.json({ success: true });
 });
 
@@ -98,6 +109,11 @@ app.post('/api/playlists/add-track', (req, res) => {
 app.post('/api/snippets', upload.single('audio'), (req, res) => {
     const audioUrl = req.file ? '/uploads/' + req.file.filename : null;
     db.prepare('INSERT INTO snippets (user_id, text, audio_url) VALUES (?, ?, ?)').run(req.session.userId, req.body.text, audioUrl);
+    res.json({ success: true });
+});
+
+app.delete('/api/snippets/:id', (req, res) => {
+    db.prepare('DELETE FROM snippets WHERE id = ? AND user_id = ?').run(req.params.id, req.session.userId);
     res.json({ success: true });
 });
 
